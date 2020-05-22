@@ -1,0 +1,51 @@
+---
+- name: Create tonuser
+  user:
+    name: "{{ ton_user }}"
+    group: "{{ ton_group }}"
+
+# - git:
+#     repo: 'https://github.com/tonlabs/main.ton.dev.git'
+#     dest: /srv/main.ton.dev.git/
+
+- name: Own tonuser
+  file:
+    path: "{{ install_path }}"
+    recurse: yes
+    owner: "{{ ton_user }}"
+    group: "{{ ton_group }}"
+
+- name: Build node
+  shell:
+    cmd: source env.sh && ./build.sh
+    chdir: /srv/main.ton.dev.git/scripts
+  args:
+    executable: /bin/bash
+
+- name: Setup node
+  shell:
+    cmd: ./setup.sh
+    chdir: "{{ install_path }}/scripts"
+  args:
+    executable: /bin/bash
+
+- name: Check keys directory
+  stat:
+    path: /srv/ton-keys
+  register: keyfolder
+
+- name: Generate keys
+  shell:
+    cmd: ./msig_genaddr.sh
+    chdir: "{{ install_path }}/scripts"
+  args:
+    executable: /bin/bash
+  when: keyfolder.stat.exists == false
+
+# Add service
+- name: Create Unit file
+  template: src=freeton.service.j2 dest=/etc/systemd/system/freeton.service mode=644
+  notify:
+    - reload systemctl
+- name: Start freeton
+  service: name=freeton.service state=started enabled=yes
