@@ -2,13 +2,13 @@
 Description=Ton net.ton.dev validator
 
 [Service]
-ExecStart={{install_path}}/ton/build/validator-engine/validator-engine -C /var/ton-work/etc/ton-global.config.json --db /var/ton-work/db
+ExecStart={{ install_path }}/{{ ton_src }}/ton/build/validator-engine/validator-engine -C /var/ton-work/etc/ton-global.config.json --db /var/ton-work/db
 ExecStop=/bin/kill -HUP $MAINPID
 Restart=on-failure
-User={{user_user}}
+User={{ton_user}}
 Group={{ton_group}}
-StandardOutput=file:/var/log/{{log_path}}/node.log
-StandardError=file:/var/log/{{log_path}}/node.err
+StandardOutput=file:{{log_path}}/node.log
+StandardError=file:{{log_path}}/node.err
 
 [Install]
 WantedBy=multi-user.target

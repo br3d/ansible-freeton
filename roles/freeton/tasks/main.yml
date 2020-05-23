@@ -6,11 +6,11 @@
 
 # - git:
 #     repo: 'https://github.com/tonlabs/main.ton.dev.git'
-#     dest: /srv/main.ton.dev.git/
+#     dest: "{{ install_path }}/{{ ton_src }}/"
 
 - name: Own tonuser
   file:
-    path: "{{ install_path }}"
+    path: "{{ install_path }}/{{ ton_src }}/"
     recurse: yes
     owner: "{{ ton_user }}"
     group: "{{ ton_group }}"
@@ -25,19 +25,19 @@
 - name: Setup node
   shell:
     cmd: ./setup.sh
-    chdir: "{{ install_path }}/scripts"
+    chdir: "{{ install_path }}/{{ ton_src }}/scripts"
   args:
     executable: /bin/bash
 
 - name: Check keys directory
   stat:
-    path: /srv/ton-keys
+    path: "{{ install_path }}/ton-keys"
   register: keyfolder
 
 - name: Generate keys
   shell:
     cmd: ./msig_genaddr.sh
-    chdir: "{{ install_path }}/scripts"
+    chdir: "{{ install_path }}/{{ ton_src }}/scripts"
   args:
     executable: /bin/bash
   when: keyfolder.stat.exists == false
@@ -45,7 +45,16 @@
 # Add service
 - name: Create Unit file
   template: src=freeton.service.j2 dest=/etc/systemd/system/freeton.service mode=644
-  notify:
-    - reload systemctl
+  # notify:
+  #   - reload systemctl
 - name: Start freeton
   service: name=freeton.service state=started enabled=yes
+
+#node-test /home/node-test/net.ton.dev/scripts/validator_msig.sh 10001 >> /home/node-test/net.ton.dev/scripts/validator.log
+- name: Cronjob for validator script
+  cron:
+    name: "validator script"
+    minute: "*/10"
+    cron_file: freeton_validator
+    user: "{{ton_user}}"
+    job: "{{ install_path }}/{{ ton_src }}/scripts/validator_msig.sh 10001 >> {{log_path}}/validator.log"
