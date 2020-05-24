@@ -4,9 +4,9 @@
     name: "{{ ton_user }}"
     group: "{{ ton_group }}"
 
-# - git:
-#     repo: 'https://github.com/tonlabs/main.ton.dev.git'
-#     dest: "{{ install_path }}/{{ ton_src }}/"
+- git:
+    repo: 'https://github.com/tonlabs/main.ton.dev.git'
+    dest: "{{ install_path }}/{{ ton_src }}/"
 
 - name: Own tonuser
   file:
@@ -36,7 +36,7 @@
 
 - name: Generate keys
   shell:
-    cmd: ./msig_genaddr.sh
+    cmd: ./msig_genaddr.sh >> "{{ install_path }}/ton-keys/seed_phrase.secret"
     chdir: "{{ install_path }}/{{ ton_src }}/scripts"
   args:
     executable: /bin/bash
@@ -50,7 +50,7 @@
 - name: Start freeton
   service: name=freeton.service state=started enabled=yes
 
-#node-test /home/node-test/net.ton.dev/scripts/validator_msig.sh 10001 >> /home/node-test/net.ton.dev/scripts/validator.log
+# Add cronjob
 - name: Cronjob for validator script
   cron:
     name: "validator script"
@@ -58,3 +58,29 @@
     cron_file: freeton_validator
     user: "{{ton_user}}"
     job: "{{ install_path }}/{{ ton_src }}/scripts/validator_msig.sh 10001 >> {{log_path}}/validator.log"
+
+# Install jq for parse json
+- name: Install jq
+  apt:
+    name: jq
+    state: present
+
+
+# Get public keycloak_client
+- name: Get publickey
+  shell:
+    cmd: cat msig.keys.json | jq -r '.public'
+    chdir: "{{ install_path }}/ton-keys"
+  register: publickey
+  args:
+    executable: /bin/bash
+
+
+# Deploy wallet
+- name: Deploy wallet
+  shell:
+    cmd: ./tonos-cli deploy "{{ install_path }}/{{ ton_src }}/configs/SafeMultisigWallet.tvc '{"owners":["0x{{ publickey.stdout }}"],"reqConfirms":1}' --abi "{{ install_path }}/{{ ton_src }}/configs/SafeMultisigWallet.abi.json" --sign "{{ install_path }}/ton-keys/msig.keys.json" --wc -1
+    chdir: "{{ install_path }}/{{ ton_src }}/ton/build/utils"
+  args:
+    executable: /bin/bash
+  when: keyfolder.stat.exists == false
