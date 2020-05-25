@@ -1,0 +1,20 @@
+---
+# tasks file for netdata
+
+- name: Install netdata
+  apt:
+    name: netdata
+    state: present
+
+- name: Netdata configuration
+  template:
+    src: netdata.conf.j2
+    dest: "/etc/netdata/netdata.conf"
+  notify: restart netdata
+
+- name: Ensure netdata service is started and enabled at boot
+  become: true
+  service:
+    name: netdata
+    state: started
+    enabled: yes
