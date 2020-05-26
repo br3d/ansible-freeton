@@ -4,3 +4,6 @@
     install_path: /srv
     ton_src: main.ton.dev.git
     log_path: /var/log/freeton
+
+    netdata_history: 3600 #second
+    nginx_server_name: netdata.example.com
