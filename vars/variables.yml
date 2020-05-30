@@ -1,7 +1,7 @@
 ---
 #ton node
 ton_user: freeton
-ton_group: users
+ton_group: freeton
 install_path: /srv
 ton_src: main.ton.dev.git
 log_path: /var/log/freeton

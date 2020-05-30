@@ -4,16 +4,19 @@
 - name: Update apt cache
   apt: update-cache=yes cache_valid_time=86400
   sudo: yes
-
+---
+# Upgrade System
 - name: Update all packages
   apt: upgrade=dist
   sudo: yes
 
+# Install packages
 - name: install basic packages
   sudo: yes
   apt: pkg={{ item }} state=latest
   tags: [packages]
   with_items:
+    - nginx
     - ntp
     - mc
     - nmap
@@ -27,6 +30,7 @@
     - curl
     - sysstat
     - dnsutils
+    - jq
 
 - name: start ntp
   service: name=ntp state=started enabled=true
