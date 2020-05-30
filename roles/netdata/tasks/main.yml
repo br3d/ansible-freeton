@@ -19,39 +19,15 @@
     state: started
     enabled: yes
 
-- name: Install nginx
-  apt:
-    name: nginx
-    state: present
-
-- name: Make sure we can use htpasswd module
-  apt: 
-    name: python-passlib 
-    state: present
-
-- name: Put password file
-  htpasswd:
-    path: /etc/nginx/htpasswd
-    name: netdata
-    password: 'S0m3P@ssword'
-    owner: root
-    group: www-data
-    mode: 0640
-
 - name: Create nginx proxy config
   template:
     src: netdata_proxy.conf.j2
-    dest:  /etc/nginx/sites-available/netdata_proxy.conf
+    dest: /etc/nginx/sites-available/netdata_proxy.conf
 
-- name: Remove nginx default conf
-  file:
-    path: /etc/nginx/sites-enabled/default
-    state: absent
-  
 - name: Enable nginx proxy config
   file:
-    src:  /etc/nginx/sites-available/netdata_proxy.conf
-    dest:  /etc/nginx/sites-enabled/netdata_proxy.conf
+    src: /etc/nginx/sites-available/netdata_proxy.conf
+    dest: /etc/nginx/sites-enabled/netdata_proxy.conf
     owner: www-data
     group: www-data
     state: link

@@ -7,8 +7,8 @@ After=network-online.target
 Type=simple
 User={{ prometheus_exporter_user }}
 Group={{ prometheus_exporter_group }}
-ExecStart=/usr/local/bin/node_exporter
-
+ExecStart=/usr/local/bin/node_exporter --web.listen-address=localhost:9100
+ExecStop=/bin/kill -HUP $MAINPID
 SyslogIdentifier=prometheus_node_exporter
 Restart=always
 

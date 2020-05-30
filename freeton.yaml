@@ -4,7 +4,7 @@
   gather_facts: yes
   roles:
     # - role: common
-    #  - role: prometheus-node-exporter
-    - role: freeton
+    - role: prometheus-node-exporter
+    # - role: freeton
   vars_files:
     - vars/variables.yml

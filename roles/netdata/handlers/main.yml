@@ -3,6 +3,7 @@
   service:
     name: netdata
     state: restarted
+
 - name: reload nginx
   service:
     name: nginx

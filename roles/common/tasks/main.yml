@@ -1,10 +1,11 @@
 ---
-# The role contains common plays that will be run on all nodes.
-
+# Update apt cache
 - name: Update apt cache
-  apt: update-cache=yes cache_valid_time=86400
+  apt:
+    update-cache: yes
+    cache_valid_time: 86400
   sudo: yes
----
+
 # Upgrade System
 - name: Update all packages
   apt: upgrade=dist
@@ -18,6 +19,7 @@
   with_items:
     - nginx
     - ntp
+    - ntpdate
     - mc
     - nmap
     - bmon
@@ -31,6 +33,31 @@
     - sysstat
     - dnsutils
     - jq
+    - python-passlib
+
+# Sync time
+- name: sync time
+  shell:
+    cmd: ntpdate -u pool.ntp.org
+  args:
+    executable: /bin/bash
 
 - name: start ntp
-  service: name=ntp state=started enabled=true
+  service:
+    name: ntp
+    state: started
+    enabled: true
+
+- name: Put password file
+  htpasswd:
+    path: /etc/nginx/htpasswd
+    name: metrics
+    password: "S0m3P@ssword"
+    owner: root
+    group: www-data
+    mode: 0640
+
+- name: Remove nginx default conf
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
