@@ -52,7 +52,7 @@
   htpasswd:
     path: /etc/nginx/htpasswd
     name: metrics
-    password: "S0m3P@ssword"
+    password: "S0m3Password"
     owner: root
     group: www-data
     mode: 0640

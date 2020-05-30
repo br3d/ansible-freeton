@@ -8,10 +8,17 @@ log_path: /var/log/freeton
 
 # netdata
 netdata_history: 3600 #second
-nginx_server_name: netdata.example.com
 
 #prometheus node exporter
-prometheus_exporter_user: node_exporter
-prometheus_exporter_group: node_exporter
-arch: amd64
+node_exporter_user: node_exporter
+node_exporter_group: node_exporter
+node_exporter_arch: amd64
 node_exporter_version: 1.0.0
+node_exporter_custom_metrics_folder: /var/lib/node_exporter/textfile_collector
+
+#nginx
+nginx_server_name: netdata.example.com
+
+#node_watcher
+watcher_bot_key: "xxxx:yyyy" # Bot key from @BotFather
+watcher_g_id: "-zzzzzzzz" # Telegram group/chat id (should start with '-')

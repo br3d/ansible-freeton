@@ -5,9 +5,9 @@ After=network-online.target
 
 [Service]
 Type=simple
-User={{ prometheus_exporter_user }}
-Group={{ prometheus_exporter_group }}
-ExecStart=/usr/local/bin/node_exporter --web.listen-address=localhost:9100
+User={{ node_exporter_user }}
+Group={{ node_exporter_group }}
+ExecStart=/usr/local/bin/node_exporter --web.listen-address=localhost:9100 --collector.textfile --collector.textfile.directory /var/lib/node_exporter/textfile_collector/
 ExecStop=/bin/kill -HUP $MAINPID
 SyslogIdentifier=prometheus_node_exporter
 Restart=always

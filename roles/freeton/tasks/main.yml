@@ -12,7 +12,7 @@
     groups: "{{ ton_group }}"
 
 # Create folder for logs
-- name: Give insecure permissions to an existing file
+- name: Create folder for logs
   file:
     state: directory
     path: "{{log_path}}"

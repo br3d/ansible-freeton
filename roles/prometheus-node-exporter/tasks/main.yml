@@ -2,22 +2,22 @@
 # Download prometheus-node-exporter
 - name: Download prometheus node exporter binary
   get_url:
-    url: "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-{{ arch }}.tar.gz"
-    dest: "/tmp/node_exporter-{{ node_exporter_version }}.linux-{{ arch }}.tar.gz"
+    url: "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-{{ node_exporter_arch }}.tar.gz"
+    dest: "/tmp/node_exporter-{{ node_exporter_version }}.linux-{{ node_exporter_arch }}.tar.gz"
 
 # Unarchive prometheus-node-exporter
 - name: Unarchive prometheus node exporter
   become: false
   unarchive:
-    creates: "/tmp/node_exporter-{{ node_exporter_version }}.linux-{{ arch }}/node_exporter"
-    src: "/tmp/node_exporter-{{ node_exporter_version }}.linux-{{ arch }}.tar.gz"
+    creates: "/tmp/node_exporter-{{ node_exporter_version }}.linux-{{ node_exporter_arch }}/node_exporter"
+    src: "/tmp/node_exporter-{{ node_exporter_version }}.linux-{{ node_exporter_arch }}.tar.gz"
     dest: "/tmp"
 
 # Create user for prometheus-node-exporter
 - name: Create prometheus_exporter_user
   user:
-    name: "{{ prometheus_exporter_user }}"
-    groups: "{{ prometheus_exporter_group }}"
+    name: "{{ node_exporter_user }}"
+    groups: "{{ node_exporter_group }}"
     create_home: no
     shell: /bin/false
     system: true
@@ -25,10 +25,10 @@
 # Put prometheus-node-exporter to work dir
 - name: Copy file with owner and permissions
   copy:
-    src: /tmp/node_exporter-{{ node_exporter_version }}.linux-{{ arch }}/node_exporter
+    src: /tmp/node_exporter-{{ node_exporter_version }}.linux-{{ node_exporter_arch }}/node_exporter
     dest: /usr/local/bin/node_exporter
-    owner: "{{ prometheus_exporter_user }}"
-    group: "{{ prometheus_exporter_group }}"
+    owner: "{{ node_exporter_user }}"
+    group: "{{ node_exporter_group }}"
     mode: "0755"
 
 # Create service
@@ -48,7 +48,7 @@
 # Remove temporary file
 - name: Remove temporary files
   file:
-    path: /tmp/node_exporter-{{ node_exporter_version }}.linux-{{ arch }}.tar.gz
+    path: /tmp/node_exporter-{{ node_exporter_version }}.linux-{{ node_exporter_arch }}.tar.gz
     state: absent
 
 # Create Nginx config for prometheus-node-exporter
@@ -67,5 +67,28 @@
     group: www-data
     state: link
   notify: reload nginx
+
 # Freeton custom metrics
-# - name:
+- name: Create folder for custom metrics
+  file:
+    state: directory
+    path: "{{node_exporter_custom_metrics_folder}}"
+    owner: "{{ node_exporter_user }}"
+    group: "{{ node_exporter_group }}"
+    mode: "640"
+
+- name: Install node_watch
+  template:
+    src: node_watcher.py.j2
+    dest: /usr/local/sbin/node_watcher.py
+    owner: "{{ node_exporter_user }}"
+    group: "{{ node_exporter_group }}"
+    mode: "0755"
+
+- name: Cronjob for watcher
+  cron:
+    name: "watcher script"
+    minute: "*/5"
+    cron_file: node_watcher
+    user: "{{ton_user}}"
+    job: "/usr/local/sbin/node_watcher.py"
