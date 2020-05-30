@@ -1,0 +1,16 @@
+[Unit]
+Description=FreeTon validation node
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart={{ install_path }}/{{ ton_src }}/ton/build/validator-engine/validator-engine -C /var/ton-work/etc/ton-global.config.json --db /var/ton-work/db
+ExecStop=/bin/kill -HUP $MAINPID
+Restart=on-failure
+User={{ton_user}}
+Group={{ton_group}}
+StandardOutput=file:{{log_path}}/node.log
+StandardError=file:{{log_path}}/node.err
+
+[Install]
+WantedBy=multi-user.target

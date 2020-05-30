@@ -1,0 +1,32 @@
+---
+# The role contains common plays that will be run on all nodes.
+
+- name: Update apt cache
+  apt: update-cache=yes cache_valid_time=86400
+  sudo: yes
+
+- name: Update all packages
+  apt: upgrade=dist
+  sudo: yes
+
+- name: install basic packages
+  sudo: yes
+  apt: pkg={{ item }} state=latest
+  tags: [packages]
+  with_items:
+    - ntp
+    - mc
+    - nmap
+    - bmon
+    - vnstat
+    - git
+    - monit
+    - mtr-tiny
+    - screen
+    - wget
+    - curl
+    - sysstat
+    - dnsutils
+
+- name: start ntp
+  service: name=ntp state=started enabled=true

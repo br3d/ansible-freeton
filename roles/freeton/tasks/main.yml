@@ -5,7 +5,7 @@
     group: "{{ ton_group }}"
 
 - git:
-    repo: 'https://github.com/tonlabs/main.ton.dev.git'
+    repo: "https://github.com/tonlabs/main.ton.dev.git"
     dest: "{{ install_path }}/{{ ton_src }}/"
 
 - name: Own tonuser
@@ -65,7 +65,6 @@
     name: jq
     state: present
 
-
 # Get public keycloak_client
 - name: Get publickey
   shell:
@@ -74,7 +73,6 @@
   register: publickey
   args:
     executable: /bin/bash
-
 
 # Deploy wallet
 - name: Deploy wallet

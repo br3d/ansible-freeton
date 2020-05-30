@@ -1,9 +1,17 @@
 ---
-    ton_user: freeton
-    ton_group: users
-    install_path: /srv
-    ton_src: main.ton.dev.git
-    log_path: /var/log/freeton
+#ton node
+ton_user: freeton
+ton_group: users
+install_path: /srv
+ton_src: main.ton.dev.git
+log_path: /var/log/freeton
 
-    netdata_history: 3600 #second
-    nginx_server_name: netdata.example.com
+# netdata
+netdata_history: 3600 #second
+nginx_server_name: netdata.example.com
+
+#prometheus node exporter
+prometheus_exporter_user: node_exporter
+prometheus_exporter_group: node_exporter
+arch: amd64
+node_exporter_version: 1.0.0
