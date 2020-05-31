@@ -3,9 +3,10 @@
   become: yes
   gather_facts: yes
   roles:
-    # - role: common
-    - role: prometheus-node-exporter
+    - role: common
+    - role: freeton
     - role: netdata
-    # - role: freeton
+    - role: prometheus-node-exporter
+
   vars_files:
     - vars/variables.yml
