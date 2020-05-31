@@ -3,6 +3,7 @@ import config
 import requests
 import socket
 import subprocess
+import json
 
 
 bot_key = "{{ watcher_bot_key }}"
@@ -12,6 +13,7 @@ l_file = "node_metrics.prom"
 tc_dir = "{{ install_path }}/{{ ton_src }}/ton/build/utils/"
 tk_dir = "/home/{{ ton_user }}/ton-keys/"
 s_dir = "{{ install_path }}/{{ ton_src }}/scripts/"
+ok_file = "{{ node_exporter_custom_metrics_folder }}/old_addr"
 
 
 # Wallet balance
@@ -40,9 +42,46 @@ def check_diff():
     except:
         tg_notification("Can't get node time diff")
 
+# Check validator
+def validator():
+    try:
+        newK = open(tk_dir + "elections/" + socket.gethostname() + "-election-adnl-key")
+        nk = newK.read()
+        oldK = open(ok_file)
+        ok = oldK.read()
+        for line in nk.split("\n"):
+            if "created new key" in line:
+                k = line.strip()[16:]
+        vCmnd = tc_dir + "tonos-cli getconfig 32"
+        v = str(subprocess.check_output(vCmnd, shell = True, executable='/bin/bash', encoding='utf-8'))
+        j = json.loads(v[42:])
+        for list in j["list"]:
+            if list['adnl_addr'] == ok:
+                val = list
+            elif list['adnl_addr'] == k:
+                var = list
+                with open(ok_file, "w") as text_file:
+                    text_file.write(format(k))
+            else:
+                val = 0
+        return val, j["total"]
+    except:
+        tg_notification("Can't get validator information")
+
+# Election nubmer
+def e_num():
+    try:
+        eCmnd = tc_dir + \
+            "tonos-cli runget -1:3333333333333333333333333333333333333333333333333333333333333333 active_election_id | grep -i 'Result' | awk '{print $2}'"
+        e = str(subprocess.check_output(eCmnd, shell = True, executable='/bin/bash', encoding='utf-8'))
+        n = e[2:-3]
+        if n == 0:
+            return n
+        return int(n, 16)
+    except:
+        tg_notification("Can't get election number")
+
 # Telegram notification
-
-
 def tg_notification(msg):
     botToken = bot_key
     botChatID = g_id
@@ -61,7 +100,22 @@ if __name__ == '__main__':
     diff = check_diff()
     if diff < -50:
         tg_notification("Diff is" + str(diff))
+    
+    election_num = e_num()
 
+    validator = validator()
+
+    if validator[0] != 0:
+        v = 1
+        weight = validator[0]["weight"]
+    else:
+        v = 0
+        weight = 0
+    
     with open(l_dir + l_file, "w") as text_file:
         text_file.write("node_diff {0}\n".format(diff))
         text_file.write("node_balance {0}\n".format(balance))
+        text_file.write("total_validators {0}\n".format(validator[1]))
+        text_file.write("election_num {0}\n".format(election_num))
+        text_file.write("validator {0}\n".format(v))
+        text_file.write("validator_weight {0}\n".format(weight))

@@ -85,6 +85,14 @@
     group: "{{ ton_group }}"
     mode: "755"
 
+- name: Create old adln_addr file
+  file:
+    state: touch
+    path: "{{node_exporter_custom_metrics_folder}}/old_addr"
+    owner: "{{ ton_user }}"
+    group: "{{ ton_group }}"
+    mode: "0644"
+
 - name: Install node_watch
   template:
     src: node_watcher.py.j2
