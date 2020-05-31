@@ -85,7 +85,7 @@
     group: "{{ ton_group }}"
     mode: "755"
 
-- name: Create old adln_addr file
+- name: Create old adnl_addr file
   file:
     state: touch
     path: "{{node_exporter_custom_metrics_folder}}/old_addr"
