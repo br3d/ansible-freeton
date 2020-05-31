@@ -8,6 +8,7 @@ log_path: /var/log/freeton
 
 # netdata
 netdata_history: 3600 #second
+netdata_proxy_port: 80
 
 #prometheus node exporter
 node_exporter_user: node_exporter
@@ -15,6 +16,7 @@ node_exporter_group: node_exporter
 node_exporter_arch: amd64
 node_exporter_version: 1.0.0
 node_exporter_custom_metrics_folder: /var/lib/node_exporter/textfile_collector
+node_exporter_proxy_port: 8080
 
 #nginx
 nginx_server_name: netdata.example.com

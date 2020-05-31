@@ -1,17 +1,25 @@
 ---
 # Download prometheus-node-exporter
 - name: Download prometheus node exporter binary
+  become: no
   get_url:
     url: "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-{{ node_exporter_arch }}.tar.gz"
     dest: "/tmp/node_exporter-{{ node_exporter_version }}.linux-{{ node_exporter_arch }}.tar.gz"
 
 # Unarchive prometheus-node-exporter
 - name: Unarchive prometheus node exporter
-  become: false
+  become: no
   unarchive:
     creates: "/tmp/node_exporter-{{ node_exporter_version }}.linux-{{ node_exporter_arch }}/node_exporter"
     src: "/tmp/node_exporter-{{ node_exporter_version }}.linux-{{ node_exporter_arch }}.tar.gz"
     dest: "/tmp"
+    remote_src: yes
+
+# Create group for prometheus-node-exporter
+- name: Create prometheus_exporter_group
+  group:
+    name: "{{ node_exporter_group }}"
+    state: present
 
 # Create user for prometheus-node-exporter
 - name: Create prometheus_exporter_user
@@ -73,9 +81,9 @@
   file:
     state: directory
     path: "{{node_exporter_custom_metrics_folder}}"
-    owner: "{{ node_exporter_user }}"
-    group: "{{ node_exporter_group }}"
-    mode: "640"
+    owner: "{{ ton_user }}"
+    group: "{{ ton_group }}"
+    mode: "755"
 
 - name: Install node_watch
   template:
@@ -92,3 +100,5 @@
     cron_file: node_watcher
     user: "{{ton_user}}"
     job: "/usr/local/sbin/node_watcher.py"
+# Установить питоновские пакеты
+

@@ -1,2 +1,5 @@
 [local]
 127.0.0.1 ansible_user=br3d
+
+[node-prod]
+51.222.40.154 ansible_user=br3d ansible_ssh_private_key_file=/home/br3d/.ssh/id_rsa ansible_port=2233

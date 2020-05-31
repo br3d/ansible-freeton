@@ -1,10 +1,11 @@
 - name: Freeton
-  hosts: all
+  hosts: local
   become: yes
   gather_facts: yes
   roles:
-    - role: common
-    # - role: prometheus-node-exporter
+    # - role: common
+    - role: prometheus-node-exporter
+    - role: netdata
     # - role: freeton
   vars_files:
     - vars/variables.yml
