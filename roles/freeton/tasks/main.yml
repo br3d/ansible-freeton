@@ -35,7 +35,7 @@
     group: "{{ ton_group }}"
 
 # Check build
-- name: Check keys directory
+- name: Check artifact
   stat:
     path: "{{ install_path }}/{{ ton_src }}//configs/SafeMultisigWallet.tvc"
   register: build_done
@@ -47,7 +47,7 @@
     chdir: /srv/main.ton.dev.git/scripts
   args:
     executable: /bin/bash
-  when: keyfolder.stat.exists == false
+  when: build_done.stat.exists == false
 
 # Check key directory for avoid recreate
 - name: Check keys directory
@@ -101,6 +101,13 @@
     mode: 644
   notify:
     - reload systemctl
+
+# Add logrotate
+- name: Create logrotate
+  template:
+    src: freeton.logrotate.j2
+    dest: /etc/logrotate.d/freeton
+    mode: 644
 
 # Check that service is working and start on boot
 - name: Start freeton
