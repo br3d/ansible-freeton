@@ -1,0 +1,12 @@
+"{{ log_path }}/*.log" {
+        maxsize 100M
+        daily
+        missingok
+        rotate 14
+        compress
+        delaycompress
+        notifempty
+        postrotate
+            systemctl restart freeton
+        endscript
+}
