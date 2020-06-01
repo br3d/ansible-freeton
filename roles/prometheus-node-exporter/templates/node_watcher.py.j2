@@ -46,12 +46,12 @@ def check_diff():
 def validator():
     try:
         newK = open(tk_dir + "elections/" + socket.gethostname() + "-election-adnl-key")
-        nk = newK.read()
+        nk = newK.read().lower()
         oldK = open(ok_file)
-        ok = oldK.read()
+        ok = oldK.read().lower().strip()
         for line in nk.split("\n"):
             if "created new key" in line:
-                k = line.strip()[16:]
+                k = line[16:].strip()
         vCmnd = tc_dir + "tonos-cli getconfig 32"
         v = str(subprocess.check_output(vCmnd, shell = True, executable='/bin/bash', encoding='utf-8'))
         j = json.loads(v[42:])
