@@ -22,7 +22,7 @@ Roles of Ansible for install and monitor FreeTon node.
 - Node Monitoring
   - Install netdata for realtime status <host>/netdata
   - install prometheus-node-exporter for collect metrics
-    - collecting data about node status(node diff, wallet balance,)
+    - collecting data about node status(node diff, wallet balance, total validators, if your node became validator, open elections)
 - Install nginx for close entry poins of monitoring systems
 - Install and sync ntp server for avoid time shift
 
@@ -33,6 +33,7 @@ Roles of Ansible for install and monitor FreeTon node.
 - Pull repository
 - Add your host to freeton file
 - Change role for installation (common should be always)
+- Add telegram bot token and group/chat id in `vars/variables.yml`
 - Run ansible: `ansible-playbook freeton.yaml -i freeton --ask-sudo-pass`
 - Ansible Build and setup node and save seed phrase `{{ install_path }}/ton-keys/seed_phrase.secret`
 - Deploy wallet [instruction](https://docs.ton.dev/86757ecb2/v/0/p/94921e-multisignature-wallet-management-in-tonos-cli)
