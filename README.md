@@ -2,6 +2,10 @@
 
 Roles of Ansible for install and monitor FreeTon node.
 
+## System requirements
+
+- Ubuntu 18 or newest
+
 ## Roles:
 
 - **common** - preparing system and install dependencies
@@ -37,6 +41,13 @@ Roles of Ansible for install and monitor FreeTon node.
 - Run ansible: `ansible-playbook freeton.yaml -i freeton --ask-sudo-pass`
 - Ansible Build and setup node and save seed phrase `{{ install_path }}/ton-keys/seed_phrase.secret`
 - Deploy wallet [instruction](https://docs.ton.dev/86757ecb2/v/0/p/94921e-multisignature-wallet-management-in-tonos-cli)
+
+## Custom metrics in prometheus-node-exporter
+
+- **node_diff** - seconds until synchronization will complete
+- **node_balance** - current wallet balance
+- **total_validators** - number of validators
+- **election_num** - election numbers
 
 ## Example Dashboard based on prometheus-node-exporter
 
