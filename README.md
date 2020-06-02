@@ -35,8 +35,9 @@ Roles of Ansible for install and monitor FreeTon node.
 ## Installation
 
 - Pull repository
-- Add your host to freeton file
+- Add your host to `freeton` file
 - Change role for installation (common should be always)
+- Change nginx user/password for basic_auth in `vars/variables.yml`
 - Add telegram bot token and group/chat id in `vars/variables.yml`
 - Run ansible: `ansible-playbook freeton.yaml -i freeton --ask-sudo-pass`
 - Ansible Build and setup node and save seed phrase `{{ install_path }}/ton-keys/seed_phrase.secret`
