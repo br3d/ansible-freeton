@@ -51,8 +51,8 @@
 - name: Put password file
   htpasswd:
     path: /etc/nginx/htpasswd
-    name: metrics
-    password: "S0m3Password"
+    name: "{{nginx_auth_user}}"
+    password: "{{nginx_auth_passw}}"
     owner: root
     group: www-data
     mode: 0640
