@@ -54,6 +54,8 @@ Roles of Ansible for install and monitor FreeTon node.
 
 ![Alt text](FreeTon.png?raw=true "Title")
 
+![Alt text](FreeTon2.png?raw=true "Title")
+
 ## todo:
 
 - Improve describe of the repository
