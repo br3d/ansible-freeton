@@ -52,7 +52,7 @@ Roles of Ansible for install and monitor FreeTon node.
 
 ## Example Dashboard based on prometheus-node-exporter
 
-![Alt text](FreeTon.png?raw=true "Title")
+![Alt text](FreeTon_main.png?raw=true "Title")
 
 ![Alt text](FreeTon2.png?raw=true "Title")
 
