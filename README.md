@@ -49,6 +49,11 @@ Roles of Ansible for install and monitor FreeTon node.
 - **node_balance** - current wallet balance
 - **total_validators** - number of validators
 - **election_num** - election numbers
+- **elections** - election status (0 - closed 1 - open)
+- **freeton_getTransactionsCount** - numbers of transaction
+- **freeton_getAccountsCount** - total accounts in net.ton.dev network
+- **freeton_getAccountsTotalBalance** - total balance of all accounts
+- **freeton_aggregateBlocks** - blocks by current validators
 
 ## Example Dashboard based on prometheus-node-exporter
 
