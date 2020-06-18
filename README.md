@@ -50,6 +50,7 @@ Roles of Ansible for install and monitor FreeTon node.
 - **total_validators** - number of validators
 - **election_num** - election numbers
 - **elections** - election status (0 - closed 1 - open)
+- **freeton_aggregateBlockSignatures** - number of signed blocks by node
 - **freeton_getTransactionsCount** - numbers of transaction
 - **freeton_getAccountsCount** - total accounts in net.ton.dev network
 - **freeton_getAccountsTotalBalance** - total balance of all accounts
@@ -57,7 +58,7 @@ Roles of Ansible for install and monitor FreeTon node.
 
 ## Example Dashboard based on prometheus-node-exporter
 
-![Alt text](FreeTon_main.png?raw=true "Title")
+![Alt text](FreeTon.png?raw=true "Title")
 
 ![Alt text](FreeTon2.png?raw=true "Title")
 
