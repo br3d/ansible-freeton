@@ -113,7 +113,7 @@
     group: "{{ ton_group }}"
     mode: "0755"
 
-# Cront for node_watch
+# Cron for node_watch
 - name: Cronjob for watcher
   cron:
     name: "watcher script"
@@ -131,6 +131,12 @@
     group: "{{ ton_group }}"
     mode: "0755"
 
+# Get hostname
+- name: Get hostname
+  shell:
+    cmd: "cat /etc/hostname"
+  register: hostname
+
 # Cront for ton_network_grab
 - name: Cronjob for ton_network_grab
   cron:
@@ -138,4 +144,4 @@
     minute: "*/5"
     cron_file: ton_network_grab
     user: "{{ton_user}}"
-    job: "/usr/local/sbin/ton_network_grab {{ node_exporter_custom_metrics_folder }}/ton_network.prom"
+    job: "/usr/local/sbin/ton_network_grab /home/{{ ton_user }}/ton-keys/elections/{{ hostname.stdout_lines[0] }}-election-key {{ node_exporter_custom_metrics_folder }}/ton_network.prom"
