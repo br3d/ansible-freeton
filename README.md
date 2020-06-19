@@ -56,11 +56,17 @@ Roles of Ansible for install and monitor FreeTon node.
 - **freeton_getAccountsTotalBalance** - total balance of all accounts
 - **freeton_aggregateBlocks** - blocks by current validators
 
+## Alerts
+
+Before install grafana template (grafana\*freeton\*node\*alerts.json) please replace "\_NODE-IP:8080" on IP address and port of your server.
+
 ## Example Dashboard based on prometheus-node-exporter
 
-![Alt text](FreeTon.png?raw=true "Title")
+![Alt text](FreeTon.png?raw=true "Dashboard with custom metrics")
 
-![Alt text](FreeTon2.png?raw=true "Title")
+![Alt text](FreeTon2.png?raw=true "Dashboard with ton-network metics")
+
+![Alt text](FreeTonAlerts.png?raw=true "Dashboard with alerts")
 
 ## todo:
 
