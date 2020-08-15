@@ -17,3 +17,5 @@ tests.out
 vbox_host.cfg
 .DS_Store
 *.py[co]
+odin
+odin.yaml

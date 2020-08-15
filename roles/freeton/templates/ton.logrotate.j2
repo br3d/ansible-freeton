@@ -6,8 +6,6 @@
         compress
         delaycompress
         notifempty
-        create 0640 node-test node-test
-        postrotate
-            systemctl restart freeton
-        endscript
+        create 0640 {{ton_user}} {{ton_group}}
+        copytruncate
 }

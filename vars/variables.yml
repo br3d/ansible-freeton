@@ -1,10 +1,10 @@
 ---
 #ton node
-ton_user: freeton
-ton_group: freeton
+ton_user: ton
+ton_group: ton
 install_path: /srv
-ton_src: main.ton.dev.git
-log_path: /var/log/freeton
+ton_src: net.ton.dev.git
+log_path: /var/log/ton
 
 # netdata
 netdata_history: 3600 #second
@@ -14,7 +14,7 @@ netdata_proxy_port: 80
 node_exporter_user: node_exporter
 node_exporter_group: node_exporter
 node_exporter_arch: amd64
-node_exporter_version: 1.0.0
+node_exporter_version: 1.0.1
 node_exporter_custom_metrics_folder: /var/lib/node_exporter/textfile_collector
 node_exporter_proxy_port: 8080
 

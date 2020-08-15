@@ -1,29 +1,36 @@
 ---
-# Create freeton group
+# Create ton group
 - name: Create ton group
   group:
     name: "{{ ton_group }}"
     state: present
 
-# Create freeton user
+# Create ton user
 - name: Create ton user
   user:
     name: "{{ ton_user }}"
-    groups: "{{ ton_group }}"
+    group: "{{ ton_group }}"
+
+- name: Allow ton user sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: "^{{ ton_user }}"
+    line: "{{ ton_user }} ALL=(ALL) NOPASSWD: ALL"
 
 # Create folder for logs
 - name: Create folder for logs
   file:
     state: directory
     path: "{{log_path}}"
-    owner: root
-    group: root
-    mode: "644"
+    owner: "{{ ton_user }}"
+    group: "{{ ton_group }}"
+    mode: "744"
 
 # Pull repository
 - name: pull repo
   git:
-    repo: "https://github.com/tonlabs/main.ton.dev.git"
+    repo: "https://github.com/tonlabs/net.ton.dev.git"
     dest: "{{ install_path }}/{{ ton_src }}/"
 
 # Tonuser is own of folder
@@ -44,7 +51,7 @@
 - name: Build node
   shell:
     cmd: source env.sh && ./build.sh
-    chdir: /srv/main.ton.dev.git/scripts
+    chdir: "{{ install_path }}/{{ ton_src }}//scripts"
   args:
     executable: /bin/bash
   when: build_done.stat.exists == false
@@ -57,30 +64,12 @@
 
 # Setup node
 - name: Setup node
-  become: yes
-  # become_user: "{{ ton_user }}"
+  become_user: "{{ ton_user }}"
   shell:
-    cmd: ./setup.sh
+    cmd: export NETWORK_TYPE="net.ton.dev" && ./setup.sh
     chdir: "{{ install_path }}/{{ ton_src }}/scripts"
   args:
     executable: /bin/bash
-  when: keyfolder.stat.exists == false
-
-- name: Copy keys
-  become: yes
-  shell:
-    cmd: mv /root/ton-keys /home/{{ ton_user }}/ton-keys
-  args:
-    executable: /bin/bash
-  when: keyfolder.stat.exists == false
-
-- name: Change ownership
-  file:
-    path: /home/{{ ton_user }}/ton-keys
-    state: directory
-    recurse: yes
-    owner: "{{ ton_user }}"
-    group: "{{ ton_group }}"
   when: keyfolder.stat.exists == false
 
 # Generate new keys
@@ -96,8 +85,8 @@
 # Add service
 - name: Create Unit file
   template:
-    src: freeton.service.j2
-    dest: /etc/systemd/system/freeton.service
+    src: ton.service.j2
+    dest: /etc/systemd/system/ton.service
     mode: 644
   notify:
     - reload systemctl
@@ -105,14 +94,14 @@
 # Add logrotate
 - name: Create logrotate
   template:
-    src: freeton.logrotate.j2
-    dest: /etc/logrotate.d/freeton
+    src: ton.logrotate.j2
+    dest: /etc/logrotate.d/ton
     mode: 644
 
 # Check that service is working and start on boot
-- name: Start freeton
+- name: Start ton
   service:
-    name: freeton.service
+    name: ton.service
     state: started
     enabled: yes
 
@@ -120,22 +109,24 @@
 - name: Cronjob for validator script
   cron:
     name: "validator script"
-    minute: "*/10"
-    cron_file: freeton_validator
+    minute: "*/30"
+    cron_file: ton_validator
     user: "{{ton_user}}"
     job: "{{ install_path }}/{{ ton_src }}/scripts/validator_msig.sh 10001 >> {{log_path}}/validator.log"
-
-# Get public keycloak_client
-- name: Get publickey
-  shell:
-    cmd: cat msig.keys.json | jq -r '.public'
-    chdir: "/home/{{ ton_user }}/ton-keys"
-  register: publickey
-  args:
-    executable: /bin/bash
+#
+#
 #
 #
 # Not sure that this action is necessary
+
+# Get publickey
+# - name: Get publickey
+#   shell:
+#     cmd: cat msig.keys.json | jq -r '.public'
+#     chdir: "/home/{{ ton_user }}/ton-keys"
+#   register: publickey
+#   args:
+#     executable: /bin/bash
 #
 # # Deploy wallet
 # - name: Deploy wallet
