@@ -146,3 +146,39 @@
     cron_file: ton_network_grab
     user: "{{ton_user}}"
     job: "/usr/local/sbin/ton_network_grab {{ node_exporter_custom_metrics_folder }}/ton_network.prom"
+
+# Install node_diff
+- name: Install node_diff
+  template:
+    src: "node_diff.sh.j2"
+    dest: "/usr/local/sbin/node_diff.sh"
+    owner: "{{ ton_user }}"
+    group: "{{ ton_group }}"
+    mode: "0755"
+
+# Cront for node_diff
+- name: Cronjob for node_diff
+  cron:
+    name: "node_diff script"
+    minute: "*/1"
+    cron_file: ton_node_diff
+    user: "{{ton_user}}"
+    job: "/usr/local/sbin/node_diff.sh"
+
+# Install node_balance
+- name: Install node_balance
+  template:
+    src: "node_balance.sh.j2"
+    dest: "/usr/local/sbin/node_balance.sh"
+    owner: "{{ ton_user }}"
+    group: "{{ ton_group }}"
+    mode: "0755"
+
+# Cron for node_balance
+- name: Cronjob for node_balance
+  cron:
+    name: "node_balance script"
+    minute: "*/1"
+    cron_file: ton_node_balance
+    user: "{{ton_user}}"
+    job: "/usr/local/sbin/node_balance.sh"

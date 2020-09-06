@@ -61,3 +61,20 @@
   file:
     path: /etc/nginx/sites-enabled/default
     state: absent
+
+# System performance
+
+- name: System performance
+  copy:
+    src: "ton.conf"
+    dest: "/etc/sysctl.d/ton.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+
+- name: System Perfomance enable
+  sudo: yes
+  shell:
+    cmd: sysctl -p -e /etc/sysctl.d/ton.conf
+  args:
+    executable: /bin/bash
