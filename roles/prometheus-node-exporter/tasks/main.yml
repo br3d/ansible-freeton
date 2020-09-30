@@ -105,23 +105,23 @@
     name: config
     executable: pip3
 
-# Install node_watch script
-- name: Install node_watch
-  template:
-    src: node_watcher.py.j2
-    dest: "/usr/local/sbin/node_watcher.py"
-    owner: "{{ ton_user }}"
-    group: "{{ ton_group }}"
-    mode: "0755"
+# # Install node_watch script
+# - name: Install node_watch
+#   template:
+#     src: node_watcher.py.j2
+#     dest: "/usr/local/sbin/node_watcher.py"
+#     owner: "{{ ton_user }}"
+#     group: "{{ ton_group }}"
+#     mode: "0755"
 
-# Cron for node_watch
-- name: Cronjob for watcher
-  cron:
-    name: "watcher script"
-    minute: "*/1"
-    cron_file: "node_watcher"
-    user: "{{ton_user}}"
-    job: "/usr/local/sbin/node_watcher.py"
+# # Cron for node_watch
+# - name: Cronjob for watcher
+#   cron:
+#     name: "watcher script"
+#     minute: "*/1"
+#     cron_file: "node_watcher"
+#     user: "{{ton_user}}"
+#     job: "/usr/local/sbin/node_watcher.py"
 
 # Install ton_network_grab for get information about ton network
 - name: Install ton_network_grab
