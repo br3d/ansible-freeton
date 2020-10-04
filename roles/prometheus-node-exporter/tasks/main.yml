@@ -90,7 +90,7 @@
 - name: Create old adnl_addr file
   file:
     state: touch
-    path: "{{node_exporter_custom_metrics_folder}}/old_addr"
+    path: "/var/tmp/old_adnl"
     owner: "{{ ton_user }}"
     group: "{{ ton_group }}"
     mode: "0644"
@@ -138,6 +138,7 @@
     cmd: "cat /etc/hostname"
   register: hostname
 
+
 # Cront for ton_network_grab
 - name: Cronjob for ton_network_grab
   cron:
@@ -145,7 +146,7 @@
     minute: "*/5"
     cron_file: ton_network_grab
     user: "{{ton_user}}"
-    job: "/usr/local/sbin/ton_network_grab {{ node_exporter_custom_metrics_folder }}/ton_network.prom"
+    job: "/usr/local/sbin/ton_network_grab {{ node_exporter_custom_metrics_folder }}/ton_network.prom" {{ network_type }} /var/tmp/old_adnl
 
 # Install node_diff
 - name: Install node_diff

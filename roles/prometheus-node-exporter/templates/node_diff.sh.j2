@@ -9,4 +9,4 @@ for i in $("{{ install_path }}/{{ ton_src }}/ton/build/validator-engine-console/
     TIME_DIFF=$((i - TIME_DIFF))
 done
 
-echo "node_diff ${TIME_DIFF}" > {{ node_exporter_custom_metrics_folder }}/diff.prom
+echo "ton_node_diff ${TIME_DIFF}" > {{ node_exporter_custom_metrics_folder }}/diff.prom

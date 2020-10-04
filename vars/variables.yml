@@ -24,5 +24,6 @@ nginx_auth_user: metrics
 nginx_auth_passw: S0mePassw0rd
 
 #node_watcher
+network_type: main # possible values: net | main
 watcher_bot_key: "xxxx:yyyy" # Bot key from @BotFather
 watcher_g_id: "-zzzzzzzz" # Telegram group/chat id (should start with '-')
