@@ -4,16 +4,16 @@
   apt:
     update-cache: yes
     cache_valid_time: 86400
-  sudo: yes
+  become: yes
 
 # Upgrade System
 - name: Update all packages
   apt: upgrade=dist
-  sudo: yes
+  become: yes
 
 # Install packages
 - name: install basic packages
-  sudo: yes
+  become: yes
   apt: pkg={{ item }} state=latest
   tags: [packages]
   with_items:
@@ -61,7 +61,6 @@
   file:
     path: /etc/nginx/sites-enabled/default
     state: absent
-
 # System performance
 
 - name: System performance
@@ -73,7 +72,7 @@
     mode: "0644"
 
 - name: System Perfomance enable
-  sudo: yes
+  become: yes
   shell:
     cmd: sysctl -p -e /etc/sysctl.d/ton.conf
   args:
