@@ -19,3 +19,4 @@ vbox_host.cfg
 *.py[co]
 odin
 odin.yaml
+odin_variables.yml

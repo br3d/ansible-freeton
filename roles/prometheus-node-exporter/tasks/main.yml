@@ -1,4 +1,16 @@
 ---
+# Create ton group
+- name: Create ton group
+  group:
+    name: "{{ ton_group }}"
+    state: present
+
+# Create ton user
+- name: Create ton user
+  user:
+    name: "{{ ton_user }}"
+    group: "{{ ton_group }}"
+
 # Download prometheus-node-exporter
 - name: Download prometheus node exporter binary
   become: no
@@ -95,15 +107,15 @@
     group: "{{ ton_group }}"
     mode: "0644"
 
-- name: Install parser
-  apt:
-    pkg: python3-pip
-    state: latest
+# - name: Install parser
+#   apt:
+#     pkg: python3-pip
+#     state: latest
 
-- name: Ensure pip_install_packages are installed.
-  pip:
-    name: config
-    executable: pip3
+# - name: Ensure pip_install_packages are installed.
+#   pip:
+#     name: config
+#     executable: pip3
 
 # # Install node_watch script
 # - name: Install node_watch

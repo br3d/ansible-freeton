@@ -4,6 +4,7 @@ ton_user: ton
 ton_group: ton
 install_path: /srv
 ton_src: net.ton.dev.git
+network_type: main # possible values: net | main
 log_path: /var/log/ton
 
 # netdata
@@ -24,6 +25,5 @@ nginx_auth_user: metrics
 nginx_auth_passw: S0mePassw0rd
 
 #node_watcher
-network_type: main # possible values: net | main
 watcher_bot_key: "xxxx:yyyy" # Bot key from @BotFather
 watcher_g_id: "-zzzzzzzz" # Telegram group/chat id (should start with '-')
