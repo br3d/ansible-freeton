@@ -3,7 +3,7 @@
 ton_user: ton
 ton_group: ton
 install_path: /srv
-ton_src: net.ton.dev.git
+ton_src: net.ton.dev # possible values:  net.ton.dev | main.ton.dev
 network_type: main # possible values: net | main
 log_path: /var/log/ton
 

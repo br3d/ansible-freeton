@@ -30,7 +30,7 @@
 # Pull repository
 - name: pull repo
   git:
-    repo: "https://github.com/tonlabs/net.ton.dev.git"
+    repo: "https://github.com/tonlabs/{{ ton_src }}.git"
     dest: "{{ install_path }}/{{ ton_src }}/"
 
 # Tonuser is own of folder
@@ -66,7 +66,7 @@
 - name: Setup node
   become_user: "{{ ton_user }}"
   shell:
-    cmd: export NETWORK_TYPE="net.ton.dev" && ./setup.sh
+    cmd: export NETWORK_TYPE="{{ ton_src }}" && ./setup.sh
     chdir: "{{ install_path }}/{{ ton_src }}/scripts"
   args:
     executable: /bin/bash
@@ -75,9 +75,9 @@
 # Generate new keys
 - name: Generate keys
   shell:
-    cmd: ./msig_genaddr.sh >> "{{ install_path }}/ton-keys/seed_phrase.secret"
+    cmd: ./msig_genaddr.sh >> "/home/{{ ton_user }}/ton-keys/seed_phrase.secret"
     chdir: "{{ install_path }}/{{ ton_src }}/scripts"
-  sudo_user: "{{ ton_user }}"
+  become_user: "{{ ton_user }}"
   args:
     executable: /bin/bash
   when: keyfolder.stat.exists == false
