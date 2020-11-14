@@ -42,6 +42,7 @@ Roles of Ansible for install and monitor FreeTon node.
 - Run ansible: `ansible-playbook freeton.yaml -i freeton --ask-sudo-pass`
 - Ansible Build and setup node and save seed phrase `{{ install_path }}/ton-keys/seed_phrase.secret`
 - Deploy wallet [instruction](https://docs.ton.dev/86757ecb2/v/0/p/94921e-multisignature-wallet-management-in-tonos-cli)
+- install grafana [FreeTon Validator Dashboard](https://grafana.com/grafana/dashboards/13394)
 
 ## Custom metrics in prometheus-node-exporter
 
@@ -62,15 +63,6 @@ Before install grafana template (grafana\*freeton\*node\*alerts.json) please rep
 
 ## Example Dashboard based on prometheus-node-exporter
 
-![Alt text](FreeTon.png?raw=true "Dashboard with custom metrics")
+![Alt text](images/dashboard.png?raw=true "FreeTon dashboard")
 
-![Alt text](FreeTon2.png?raw=true "Dashboard with ton-network metics")
-
-![Alt text](FreeTonAlerts.png?raw=true "Dashboard with alerts")
-
-## todo:
-
-- Improve describe of the repository
-- Create rules for Alertmanager (Prometheus)
-- Grafana template
-- Install and configure Loki for log monitoring and alerting
+![Alt text](images/dashboard2.png?raw=true "FreeTon dashboard part2")
