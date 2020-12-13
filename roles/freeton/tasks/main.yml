@@ -8,6 +8,7 @@
 # Create ton user
 - name: Create ton user
   user:
+    shell: "/bin/bash"
     name: "{{ ton_user }}"
     group: "{{ ton_group }}"
 
@@ -87,7 +88,7 @@
   template:
     src: ton.service.j2
     dest: /etc/systemd/system/ton.service
-    mode: 644
+    mode: "644"
   notify:
     - reload systemctl
 
@@ -96,7 +97,7 @@
   template:
     src: ton.logrotate.j2
     dest: /etc/logrotate.d/ton
-    mode: 644
+    mode: "644"
 
 # Check that service is working and start on boot
 - name: Start ton
